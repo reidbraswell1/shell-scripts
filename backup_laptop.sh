@@ -6,6 +6,7 @@
 #
 # Global Variables
 TIMESTAMP=`date +"%d%b%Y"`
+CURRENT_TIME='%a %b %d %Y %l:%M:%S %p'
 PARTS=(1 2 3 4 5 6 8 12 13 7)
 DRV="/dev/sda"
 BKP_DRV="sda"
@@ -13,7 +14,7 @@ DESC="backup"
 DASH="-"
 BS=4096
 DIR="/mnt"
-PRODUCTION=true;
+PRODUCTION=false;
 SLEEP_TIME=5s;
 
 # Start time of the entire backup
@@ -36,12 +37,17 @@ ELAPSED_TIME() {
 }
 
 for PART in "${PARTS[@]}"; do
+    current_time=$(date +"$CURRENT_TIME")
     p_start=$(date +"%s")
-    echo "Backing up PARTITION $PART"
+    echo "Backing up PARTITION $PART $current_time"
     if $PRODUCTION; then
         dd if=$DRV$PART of=$DIR/$BKP_DRV$PART$DASH$DESC$DASH$TIMESTAMP
+        current_time=$(date +$CURRENT_TIME)
+        echo "End backing up PARTITION $PART $current_time"
     else
         sleep $SLEEP_TIME
+        current_time=$(date +"$CURRENT_TIME")
+        echo "End backing up PARTITION $PART $current_time"
     fi
     ELAPSED_TIME $p_start false
 done
