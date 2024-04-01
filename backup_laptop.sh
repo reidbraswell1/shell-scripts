@@ -42,7 +42,7 @@ for PART in "${PARTS[@]}"; do
     echo "Backing up PARTITION $PART $current_time"
     if $PRODUCTION; then
         dd if=$DRV$PART of=$DIR/$BKP_DRV$PART$DASH$DESC$DASH$TIMESTAMP
-        current_time=$(date +$CURRENT_TIME)
+        current_time=$(date +"$CURRENT_TIME")
         echo "End backing up PARTITION $PART $current_time"
     else
         sleep $SLEEP_TIME
